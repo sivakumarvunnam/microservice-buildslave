@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     wget \
     jq \
+    unzip \
     python-pip \
     software-properties-common
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
@@ -78,7 +79,7 @@ ENV FARGATE_VERSION v0.6.0
 RUN curl -SLo /usr/local/bin/fargate https://github.com/turnerlabs/fargate/releases/download/${FARGATE_VERSION}/ncd_linux_amd64 && chmod +x /usr/local/bin/fargate
 
 # install node
-RUN curl https://raw.githubusercontent.com/isaacs/nave/master/nave.sh | bash -s -- usemain lts && npm install serverless
+RUN curl https://raw.githubusercontent.com/isaacs/nave/master/nave.sh | bash -s -- usemain lts && npm install global serverless
 
 # Install Kubectl
 ENV KUBECTL_VERSION 1.11.5
@@ -97,6 +98,13 @@ RUN adduser --system --ingroup jenkins --home $HOME --uid 10000 jenkins
 
 RUN chmod +x /usr/local/bin/kubectl && \
     chmod +x /usr/local/bin/aws-iam-authenticator
+
+#install terraform
+ENV TERRAFORM_VERSION 0.11.13
+RUN wget --quiet https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+    && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+    && mv terraform /usr/bin \
+    && rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 
 # SOAP UI Version to download
 ENV SOAPUI_VERSION 5.4.0
