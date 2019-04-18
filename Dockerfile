@@ -9,6 +9,8 @@
 # kubectl
 # stable node version
 # serverless
+# tearrform 0.11.13
+# Jruby 9.1.13.0
 FROM ubuntu:16.04
 MAINTAINER Sivakumar Vunnam <sivakumarvunnam1@gmail.com>
 # convenient aliases
@@ -113,8 +115,16 @@ RUN wget --no-verbose -O /tmp/SoapUI-${SOAPUI_VERSION}-linux-bin.tar.gz https://
 RUN tar xzf /tmp/SoapUI-${SOAPUI_VERSION}-linux-bin.tar.gz -C /opt/
 RUN ln -s /opt/SoapUI-${SOAPUI_VERSION} /opt/soapui
 # Set environment
-ENV SOAPUI_HOME /opt/soapui/bin
+ENV SOAPUI_HOME /opt/soapui
 ENV PATH $SOAPUI_HOME/bin:$PATH
+
+# install jruby 
+ENV JRUBY_VERSION 9.1.13.0
+RUN wget --no-verbose -O /tmp/jruby-bin-${JRUBY_VERSION}.tar.gz https://s3.amazonaws.com/jruby.org/downloads/${JRUBY_VERSION}/jruby-bin-${JRUBY_VERSION}.tar.gz && \
+    tar xzf /tmp/jruby-bin-${JRUBY_VERSION}.tar.gz -C /opt/ && \
+    rm -rf /tmp/jruby-bin-${JRUBY_VERSION}.tar.gz
+ENV JRUBY_HOME /opt/jruby-${JRUBY_VERSION}
+ENV PATH $JRUBY_HOME/bin:$PATH
 
 CMD ["/bin/bash"]
 
