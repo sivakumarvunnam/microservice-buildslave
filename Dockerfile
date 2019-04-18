@@ -125,6 +125,7 @@ RUN wget --no-verbose -O /tmp/jruby-bin-${JRUBY_VERSION}.tar.gz https://s3.amazo
     rm -rf /tmp/jruby-bin-${JRUBY_VERSION}.tar.gz
 ENV JRUBY_HOME /opt/jruby-${JRUBY_VERSION}
 ENV PATH $JRUBY_HOME/bin:$PATH
+RUN jruby -S gem update && jgem install bundler --no-ri --no-rdoc
 
 CMD ["/bin/bash"]
 
